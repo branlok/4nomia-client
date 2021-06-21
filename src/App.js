@@ -21,10 +21,12 @@ let connect = io.connect("http://localhost:3001");
 function App() {
   const socket = useRef(connect);
   const location = useLocation();
+  console.log(location);
+
   const transitions = useTransition(location, {
-    from: { opacity: 0, translateY: "-100%", rotateZ: "20deg"},
+    from: { opacity: 1, translateY: "-100%", rotateZ: "20deg"},
     enter: { opacity: 1, translateY: "0%", rotateZ: "0deg" },
-    leave: { opacity: 0, translateY: "100%", rotateZ: "20deg" },
+    leave: { opacity: 1, translateY: "100%", rotateZ: "20deg" },
     config: config.gentle,
   });
 

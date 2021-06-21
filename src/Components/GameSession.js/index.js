@@ -4,16 +4,20 @@ import styled from "styled-components";
 import SocketContext from "../../Context/socket";
 import Controller from "./Controller";
 import Hand from "./Hand";
+import OverlayPrompt from "./OverlayPrompt";
 import TurnIndicator from "./TurnIndicator";
 import WildCard from "./WildCard";
 import YourTurnIndicator from "./YourTurnIndicator.js";
+import { ReactComponent as ArrowSvg } from "../../Styles/svg/up-arrow-svgrepo-com (6).svg";
 function GameSession() {
   const { state } = useLocation();
+  console.log(state, "yeah");
   const socket = useContext(SocketContext);
   const [playerDraw, setPlayerDraw] = useState();
   const [faceoffListener, setFaceoffListener] = useState();
   const [wildCardListener, setWildCardListener] = useState();
   const [faceoffResolvedListener, setFaceoffResolvedListener] = useState();
+  const [endGame, setEndGame] = useState(false);
   useEffect(() => {
     socket.on(`player_draw`, (response) => {
       setPlayerDraw(response);
@@ -39,17 +43,27 @@ function GameSession() {
       //   setDrawable(true);
       // }
     });
+    socket.on("roomAnnouncement", (response) => {
+      console.log(response);
+      setEndGame(response);
+    });
 
     return () => {
       socket.off(`player_draw`);
       socket.off(`faceoff_challenged`);
       socket.off(`wildCard`);
-      socket.off('faceoff_resolved');
+      socket.off("faceoff_resolved");
+      socket.off("roomAnnouncement");
     };
   });
 
   return (
     <>
+      <OverlayPrompt
+        endGame={endGame}
+        playerPositions={state.init.playerPositions}
+        firstPlayerName={state.init.playerPositions[state.init.playerTurn][1]}
+      />
       <LeftDivision>
         <h1>WILD CARD</h1>
         <WildCard wildCardListener={wildCardListener} />
@@ -59,18 +73,23 @@ function GameSession() {
           {Object.keys(state.roomState.currentMembers).map((item, index) => {
             if (item !== socket.id) {
               return (
-                <div key={item}>
-                  <Hand
-                    faceoffListener={faceoffListener}
-                    playerId={item}
-                    playerDraw={playerDraw}
-                  />
-                  <TurnIndicator
-                    playerDraw={playerDraw}
-                    playerId={item}
-                    firstTurn={state.init.playerPositions[0][0] == item}
-                    playerName={state.roomState.currentMembers[socket.id]}
-                  />
+                <div className="player" key={item}>
+                  <div className="ain">
+                    <Hand
+                      faceoffListener={faceoffListener}
+                      playerId={item}
+                      playerDraw={playerDraw}
+                    />
+                    <TurnIndicator
+                      playerDraw={playerDraw}
+                      playerId={item}
+                      firstTurn={state.init.playerPositions[0][0] == item}
+                      playerName={state.roomState.currentMembers[item]}
+                    />
+                  </div>
+                  <div className="arrow">
+                    <ArrowSvg className="arrowSvg" />
+                  </div>
                 </div>
               );
             }
@@ -107,13 +126,15 @@ function GameSession() {
 const LeftDivision = styled.div`
   width: 400px;
   height: 100%;
-  border-right: 5px solid #b8241f;
-  background-color: rgba(255, 255, 255, 0.1);
+  border-right: 5px solid #ff2119;
+  /* background-color: rgba(255, 255, 255, 0.1); */
+  background-color: #ff2119;
   flex: 0 1 auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
   h1 {
     margin-bottom: 20px;
     font-size: 20px;
@@ -127,17 +148,37 @@ const LeftDivision = styled.div`
 const RightDivision = styled.div`
   width: 100%;
   height: 100%;
+  /* background-color: rgba(255, 255, 255, 0.05);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cpolygon fill='%23c23838' fill-opacity='0.48' points='120 120 60 120 90 90 120 60 120 0 120 0 60 60 0 0 0 60 30 90 60 120 120 120 '/%3E%3C/svg%3E"); */
 `;
-
 const StyOpponentQuadrant = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   height: 50%;
   width: 100%;
-  border-bottom: 5px solid #b8241f;
-  background-color: ${(props) =>
-    props.turn ? " rgba(0,0,0,0.2)" : " rgba(0,0,0,0)"};
+  border-bottom: 5px solid #ff2119;
+  background-color: rgba(255, 255, 255, 0.55);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cpolygon fill='%23ff4d4d' fill-opacity='.3' points='120 0 120 60 90 30 60 0 0 0 0 0 60 60 0 120 60 120 90 90 120 60 120 0'/%3E%3C/svg%3E");
+  .player {
+    display: flex;
+    .main {
+    }
+    .arrow {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 50px;
+      margin: 0px 10px;
+      .arrowSvg {
+        width: 20px;
+        height: 20px;
+        fill: black;
+        opacity: 0.5;
+        transform: rotate(90deg);
+      }
+    }
+  }
 `;
 
 const StyYourQuadrant = styled.div`
@@ -151,6 +192,9 @@ const StyYourQuadrant = styled.div`
   transition: 1s;
   background-color: ${(props) =>
     props.turn ? " rgba(0,0,0,0.2)" : " rgba(0,0,0,0)"};
+  background-color: rgba(255, 255, 255, 0.05);
+  background-color: #bb0606;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cpolygon fill='%235c1405' fill-opacity='0.61' points='120 0 120 60 90 30 60 0 0 0 0 0 60 60 0 120 60 120 90 90 120 60 120 0'/%3E%3C/svg%3E");
   .controller {
     width: 100px;
     height: 300px;
