@@ -17,6 +17,7 @@ import Session from "./Routes/Session";
 import { useTransition, animated, config } from "react-spring";
 
 let connect = io.connect("http://localhost:3001");
+// let connect = io.connect("https://nomia-server.herokuapp.com/");
 
 function App() {
   const socket = useRef(connect);
@@ -24,9 +25,9 @@ function App() {
   console.log(location);
 
   const transitions = useTransition(location, {
-    from: { opacity: 1, translateY: "-100%", rotateZ: "20deg"},
-    enter: { opacity: 1, translateY: "0%", rotateZ: "0deg" },
-    leave: { opacity: 1, translateY: "100%", rotateZ: "20deg" },
+    from: { translateY: "-100%", rotateZ: "5deg"},
+    enter: { translateY: "0%", rotateZ: "0deg" },
+    leave: { translateY: "100%", rotateZ: "5deg" },
     config: config.gentle,
   });
 

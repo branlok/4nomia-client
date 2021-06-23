@@ -1,8 +1,9 @@
 import { useSpring, animated, config } from "react-spring";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
-function OverlayPrompt({ firstPlayerName, endGame, playerPositions }) {
+function OverlayPrompt({ firstTurn, firstPlayerName, endGame, playerPositions }) {
   let [msg, setMsg] = useState(firstPlayerName);
 
   let props = useSpring({
@@ -22,11 +23,11 @@ function OverlayPrompt({ firstPlayerName, endGame, playerPositions }) {
   let endGameProp = useSpring({
     from: {
       opacity: 0,
-      backgroundColor: "rgba(0,0,0,0)"
+      backgroundColor: "rgba(0,0,0,0)",
     },
     to: {
       opacity: endGame && 1,
-      backgroundColor: "rgba(0,0,0,0.5)"
+      backgroundColor: "rgba(0,0,0,0.4)",
     },
     config: config.default,
     // onRest: () => setTimeout(() => setMsg(false), 1000),
@@ -40,12 +41,12 @@ function OverlayPrompt({ firstPlayerName, endGame, playerPositions }) {
 
   if (endGame) {
     return (
-      <StyledOverlay style={endGameProp} className="blackBackdrop">
+      <StyledOverlay style={endGameProp}>
         Game Finished!
         <div className="leaderboard">
           <h1>Leaderboard</h1>
           {endGame.results.map((item, idx) => {
-            if (item !== null && !playerPositions[idx]) {
+            if (item !== null) {
               return (
                 <div className="player" key={playerPositions[idx]}>
                   <h2>{idx + 1} Place</h2>
@@ -56,20 +57,29 @@ function OverlayPrompt({ firstPlayerName, endGame, playerPositions }) {
                 </div>
               );
             }
-          })}
+          })} 
+          <div className="footer">Thanks for playing ! <br/> To return to home press <Link to="/">here</Link></div>
         </div>
       </StyledOverlay>
     );
+  } else if (firstTurn) {
+    return (
+        <StyledOverlay style={props}> You start first!</StyledOverlay>
+      );
+  } else if (!firstTurn) {
+    return (
+        <StyledOverlay style={props}> {firstPlayerName} goes first!</StyledOverlay>
+      )
+  } else {
+      return null
   }
 
-  return (
-    <StyledOverlay style={props}>{firstPlayerName} goes first!</StyledOverlay>
-  );
+
 }
 
 const StyledOverlay = styled(animated.div)`
-  height: 100%;
-  width: 100%;
+  height: 100vh;
+  width: 100vw;
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -79,10 +89,16 @@ const StyledOverlay = styled(animated.div)`
   color: white;
   font-weight: bold;
   z-index: 2;
-  margin-bottom: 20px;
   transition: 0.2s;
-  .blackBackdrop {
-    background-color: rgba(0, 0, 0, 0.4);
+  .footer {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 14px;
+      color: gray;
+      a {
+          text-decoration: none;
+
+      }
   }
   .leaderboard {
     background-color: white;

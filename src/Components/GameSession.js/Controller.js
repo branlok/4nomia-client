@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 import styled from "styled-components";
 import SocketContext from "../../Context/socket";
@@ -11,17 +11,17 @@ function Controller({
   firstTurn,
 }) {
   const { code } = useParams();
+  const buttonRef = useRef();
   const socket = useContext(SocketContext);
   const [drawable, setDrawable] = useState(firstTurn);
   const [winable, setWinable] = useState(false);
   const [faceoffIds, setFaceoffIds] = useState();
 
   const draw = () => {
-    console.log(drawable);
     if (drawable) {
+      setDrawable(false);
       socket.emit("draw", code, (response) => {
-        console.log(response, "did this happen");
-        setDrawable(false);
+        console.log(response, playerId, "did this happen");
       });
     }
   };
@@ -63,46 +63,31 @@ function Controller({
     }
   }, [faceoffResolvedListener]);
 
-//   useEffect(() => {
-//     // socket.on(`player_draw`, (response) => {
-//     //   console.log("what", response.nextToDraw, playerId);
-//     //   if (response.nextToDraw == playerId) {
-//     //     setDrawable(true);
-//     //   }
-//     // });
-//     // socket.on(`faceoff_challenged`, (response) => {
-//     //   setDrawable(false);
-//     //   if (response.playersInvolved.includes(playerId)) {
-//     //     setWinable(true);
-//     //     setFaceoffIds(response.playersInvolved);
-//     //   }
-//     // });
-
-//     // socket.on(`faceoff_resolved`, (response) => {
-//     //   setWinable(false);
-//     //   console.log("i ran to resolve");
-//     //   if (response.nextToDraw == playerId) {
-//     //     console.log("draw it pls?");
-//     //     setDrawable(true);
-//     //   }
-//     // });
-
-//     return () => {
-//       //  socket.off(`player_draw`);
-//       socket.off(`faceoff_challenged`);
-//       socket.off(`faceoff_resolved`);
-//     };
-//   }, [playerId]);
+  let keyDown = (e) => {
+    if (e.code == "Space" && !e.repeat) {
+      buttonRef.current.click();
+    }
+  };
 
   useEffect(() => {
-    console.log(drawable);
-  });
+    if (drawable) {
+      window.addEventListener("keyup", keyDown);
+    }
+
+    return () => window.removeEventListener("keyup", keyDown);
+  }, [drawable]);
 
   return (
     <StyledButtonsContainer>
       {
-        <button disabled={!drawable} onClick={draw} className="draw-btn">
-          Draw Card
+        <button
+          ref={buttonRef}
+          disabled={!drawable}
+          onClick={draw}
+          className="draw-btn"
+        >
+          Draw Card <br />
+          <span className="shortcut">(space bar)</span>
         </button>
       }
       {
@@ -127,9 +112,15 @@ const StyledButtonsContainer = styled.div`
     font-weight: bold;
     border-radius: 5px;
     font-size: 16px;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.36), 0 3px 6px rgba(0, 0, 0, 0.23);
+    transition: 0.2s;
+    cursor: pointer;
+    .shortcut {
+      font-size: 12px;
+      color: #b8b8b8;
+    }
     :hover {
-      box-shadow: 0 0px 0px rgba(0, 0, 0, 0.16), 0 0px 0px rgba(0, 0, 0, 0.23);
+      box-shadow: 0 0px 0px rgba(0, 0, 0, 0), 0 0px 0px rgba(0, 0, 0, 0);
     }
   }
 

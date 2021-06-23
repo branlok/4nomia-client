@@ -49,30 +49,6 @@ export default function Hand({ faceoffListener, playerDraw, playerId }) {
   }, [faceoffListener]);
 
   useEffect(() => {
-    // socket.on(`player_draw`, (response) => {
-    //   if (response.playerId == playerId) {
-    //     console.log("i ran");
-    //     setItems((prevState) => [
-    //       ...prevState,
-    //       {
-    //         socket: playerId,
-    //         id: response.card,
-    //         ...basicDeck[response.card],
-    //         deg: (Math.random() - 0.5) * 20,
-    //         translateX: (Math.random() - 0.5) * 10,
-    //         translateY: (Math.random() - 0.5) * 10,
-    //       },
-    //     ]);
-    //   }
-    // });
-
-    // socket.on(`faceoff_challenged`, (response) => {
-    //   if (response.playersInvolved.includes(playerId)) {
-    //     console.log(playerId, "challenged");
-    //     setFaceoff(true);
-    //   }
-    // });
-
     socket.on(`faceoff_resolved_${playerId}`, (response) => {
       setFaceoff(false);
       setItems((prevState) => {
@@ -82,12 +58,11 @@ export default function Hand({ faceoffListener, playerDraw, playerId }) {
       });
       if (response.victor == playerId) {
         console.log("you won");
+
       }
     });
 
     return () => {
-      //   socket.off(`player_draw`);
-      //socket.off(`faceoff_challenged`);
       socket.off(`faceoff_resolved_${playerId}`);
     };
   });

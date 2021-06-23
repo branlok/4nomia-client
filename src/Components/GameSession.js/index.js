@@ -11,7 +11,6 @@ import YourTurnIndicator from "./YourTurnIndicator.js";
 import { ReactComponent as ArrowSvg } from "../../Styles/svg/up-arrow-svgrepo-com (6).svg";
 function GameSession() {
   const { state } = useLocation();
-  console.log(state, "yeah");
   const socket = useContext(SocketContext);
   const [playerDraw, setPlayerDraw] = useState();
   const [faceoffListener, setFaceoffListener] = useState();
@@ -62,6 +61,7 @@ function GameSession() {
       <OverlayPrompt
         endGame={endGame}
         playerPositions={state.init.playerPositions}
+        firstTurn={state.init.playerPositions[0][0] == socket.id}
         firstPlayerName={state.init.playerPositions[state.init.playerTurn][1]}
       />
       <LeftDivision>
@@ -74,7 +74,10 @@ function GameSession() {
             if (item !== socket.id) {
               return (
                 <div className="player" key={item}>
-                  <div className="ain">
+                  <div className="arrow">
+                    <ArrowSvg className="arrowSvg" />
+                  </div>
+                  <div className="main">
                     <Hand
                       faceoffListener={faceoffListener}
                       playerId={item}
@@ -87,15 +90,12 @@ function GameSession() {
                       playerName={state.roomState.currentMembers[item]}
                     />
                   </div>
-                  <div className="arrow">
-                    <ArrowSvg className="arrowSvg" />
-                  </div>
                 </div>
               );
             }
           })}
         </StyOpponentQuadrant>
-        <StyYourQuadrant>
+        <StyYourQuadrant turn={playerDraw?.nextToDraw == socket.id}>
           <Hand
             // playerHands={playerHands}
             faceoffListener={faceoffListener}
@@ -117,6 +117,9 @@ function GameSession() {
             firstTurn={state.init.playerPositions[0][0] == socket.id}
             playerName={state.roomState.currentMembers[socket.id]}
           />
+          <div className="nameTag">
+            <div>{state.roomState.currentMembers[socket.id]}</div>
+          </div>
         </StyYourQuadrant>
       </RightDivision>
     </>
@@ -158,8 +161,8 @@ const StyOpponentQuadrant = styled.div`
   height: 50%;
   width: 100%;
   border-bottom: 5px solid #ff2119;
-  background-color: rgba(255, 255, 255, 0.55);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cpolygon fill='%23ff4d4d' fill-opacity='.3' points='120 0 120 60 90 30 60 0 0 0 0 0 60 60 0 120 60 120 90 90 120 60 120 0'/%3E%3C/svg%3E");
+  /* background-color: rgba(0, 0, 0, 0.15);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cpolygon fill='%23ff4d4d' fill-opacity='.8' points='120 0 120 60 90 30 60 0 0 0 0 0 60 60 0 120 60 120 90 90 120 60 120 0'/%3E%3C/svg%3E"); */
   .player {
     display: flex;
     .main {
@@ -193,8 +196,29 @@ const StyYourQuadrant = styled.div`
   background-color: ${(props) =>
     props.turn ? " rgba(0,0,0,0.2)" : " rgba(0,0,0,0)"};
   background-color: rgba(255, 255, 255, 0.05);
-  background-color: #bb0606;
+  /* background-color: #bb0606; */
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cpolygon fill='%235c1405' fill-opacity='0.61' points='120 0 120 60 90 30 60 0 0 0 0 0 60 60 0 120 60 120 90 90 120 60 120 0'/%3E%3C/svg%3E");
+  .nameTag {
+    div {
+      text-align: center;
+      /* border: 1px solid black; */
+      width: 100%;
+      transition: 0.3s;
+      padding: 10px;
+      border-radius: 10px;
+      /* color: white; */
+      color: ${(props) =>
+        props.turn ? "balck" : "white"};
+      background-color: ${(props) =>
+        props.turn ? "rgba(255, 255, 255, 0.5)" : "rgba(0, 0, 0, 0.0);"};
+    }
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    justify-content: center;
+    display: flex;
+    padding: 10px;
+  }
   .controller {
     width: 100px;
     height: 300px;

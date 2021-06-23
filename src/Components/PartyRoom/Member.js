@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import PlayersInRoom from "./PlayersInRoom";
 import UserIndicator from "./UserIndicator";
@@ -6,6 +6,19 @@ import UserIndicator from "./UserIndicator";
 function Member({ roomState, readyUp, notReady }) {
   const { state } = useLocation();
   const [ready, setReady] = useState(false);
+
+  let toggleReady = (e) => {
+    if (e.code == "Space" && !e.repeat) {
+      ready ? notReady() : readyUp();
+      setReady((prevState) => !prevState);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("keyup", toggleReady);
+    return () => window.removeEventListener("keyup", toggleReady);
+  }, [ready]);
+
   if (!roomState?.currentMembers) return null;
   return (
     <>
@@ -16,13 +29,10 @@ function Member({ roomState, readyUp, notReady }) {
         <PlayersInRoom roomState={roomState} />
       </div>
 
-      <button
-        className="next-button"
-        onClick={() => {
+      <button className="next-button" onClick={() => {
           ready ? notReady() : readyUp();
           setReady((prevState) => !prevState);
-        }}
-      >
+        }}>
         {ready ? "Cancel" : "Ready"}
       </button>
       <UserIndicator roomState={roomState} />

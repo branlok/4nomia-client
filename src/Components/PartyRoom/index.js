@@ -89,6 +89,7 @@ function PartyRoom() {
       socket.off("roomAnnouncement");
     };
   });
+
   
   if (state.role === "leader") {
     return (
