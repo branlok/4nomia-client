@@ -3,9 +3,14 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
-function OverlayPrompt({ firstTurn, firstPlayerName, endGame, playerPositions }) {
+function OverlayPrompt({
+  firstTurn,
+  firstPlayerName,
+  endGame,
+  playerPositions,
+}) {
   let [msg, setMsg] = useState(firstPlayerName);
-
+  let [ranks, setRanks] = useState();
   let props = useSpring({
     from: {
       scale: 0,
@@ -35,6 +40,22 @@ function OverlayPrompt({ firstTurn, firstPlayerName, endGame, playerPositions })
 
   useEffect(() => {
     if (endGame) {
+      let leaderboard = [];
+
+      endGame.results.forEach((item, index) => {
+        if (playerPositions[index]) {
+          if (item) {
+            leaderboard.push({ name: playerPositions[index][1], score: item });
+          } else {
+            leaderboard.push({ name: playerPositions[index][1], score: 0 });
+          }
+        }
+      });
+      let sortedLeaderBoard = leaderboard.sort((first, second) => {
+        return  second.score - first.score;
+      });
+
+      setRanks(sortedLeaderBoard);
       setMsg(true);
     }
   }, [endGame]);
@@ -45,7 +66,19 @@ function OverlayPrompt({ firstTurn, firstPlayerName, endGame, playerPositions })
         Game Finished!
         <div className="leaderboard">
           <h1>Leaderboard</h1>
-          {endGame.results.map((item, idx) => {
+          {ranks &&
+            ranks.map((item, idx) => {
+              return (
+                <div className="player" key={item.name}>
+                  <h2>Rank {idx + 1}</h2>
+                  <div>
+                    {item.name} <span className="with"> with </span>
+                    <span className="points"> {item.score} pts</span>
+                  </div>
+                </div>
+              );
+            })}
+          {/* {endGame.results.map((item, idx) => {
             if (item !== null) {
               return (
                 <div className="player" key={playerPositions[idx]}>
@@ -57,24 +90,26 @@ function OverlayPrompt({ firstTurn, firstPlayerName, endGame, playerPositions })
                 </div>
               );
             }
-          })} 
-          <div className="footer">Thanks for playing ! <br/> To return to home press <Link to="/">here</Link></div>
+          })} */}
+          <div className="footer">
+            Thanks for playing ! <br /> To return to home press{" "}
+            <Link to="/">here</Link>
+          </div>
         </div>
       </StyledOverlay>
     );
   } else if (firstTurn) {
-    return (
-        <StyledOverlay style={props}> You start first!</StyledOverlay>
-      );
+    return <StyledOverlay style={props}> You start first!</StyledOverlay>;
   } else if (!firstTurn) {
     return (
-        <StyledOverlay style={props}> {firstPlayerName} goes first!</StyledOverlay>
-      )
+      <StyledOverlay style={props}>
+        {" "}
+        {firstPlayerName} goes first!
+      </StyledOverlay>
+    );
   } else {
-      return null
+    return null;
   }
-
-
 }
 
 const StyledOverlay = styled(animated.div)`
@@ -91,14 +126,13 @@ const StyledOverlay = styled(animated.div)`
   z-index: 2;
   transition: 0.2s;
   .footer {
-      text-align: center;
-      margin-top: 10px;
-      font-size: 14px;
-      color: gray;
-      a {
-          text-decoration: none;
-
-      }
+    text-align: center;
+    margin-top: 10px;
+    font-size: 14px;
+    color: gray;
+    a {
+      text-decoration: none;
+    }
   }
   .leaderboard {
     background-color: white;
@@ -125,6 +159,7 @@ const StyledOverlay = styled(animated.div)`
     }
     .with {
       color: gray;
+      font-weight: normal;
     }
     .points {
       color: green;

@@ -1,4 +1,16 @@
-import styled from "styled-components";
+import styled, {keyframes} from "styled-components";
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+`;
 
 export default styled.div`
   display: flex;
@@ -44,6 +56,7 @@ export default styled.div`
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      overflow: hidden;
       label {
         font-size: 20px;
         margin: 10px 0px;
@@ -64,6 +77,22 @@ export default styled.div`
         font-family: Arial, Helvetica, sans-serif;
         letter-spacing: 6px;
         -webkit-text-security: disc;
+      }
+      .prompt {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        display: flex;
+        align-items: center;
+        padding: 5px;
+        justify-content: center;
+        width: calc(100% - 10px);
+        margin: 5px;
+        border-radius: 5px;
+        background-color: coral;
+        color: white;
+        font-weight: bold;
+        animation: ${fadeIn} 0.5s ease backwards;
       }
       /* .password-field {
         font-family: Arial, Helvetica, sans-serif;

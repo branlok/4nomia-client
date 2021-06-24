@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 
 import styled from "styled-components";
-import { Field, Form, Formik } from "formik";
+// import { Field, Form, Formik } from "formik";
 import SocketContext from "../../Context/socket";
 import { useHistory, useParams } from "react-router";
 import UsernameForm from "./UsernameForm";
@@ -54,6 +54,17 @@ function JoinMenu() {
   };
 
   useEffect(() => {
+    console.log("fired");
+    socket.emit("checkRoom", code, (response) => {
+      if (response.status == "error") {
+        history.push("/error", { message: response.message });
+      } else {
+          console.log(response);
+      }
+    });
+  }, [code]);
+
+  useEffect(() => {
     if (payload && view === "enter") {
       console.log("i ran");
       JoinRoom();
@@ -75,14 +86,13 @@ function JoinMenu() {
             </animated.div>
           ) : (
             <animated.div style={{ ...props }} className="container black">
-              <PasswordForm setPayload={setPayload} setView={setView} />
+              <PasswordForm code={code} setPayload={setPayload} setView={setView} payload={payload}/>
             </animated.div>
           );
         })}
       </div>
     </StyledForm>
   );
-
 }
 
 // const StyledMenu = styled.div`

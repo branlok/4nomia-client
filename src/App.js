@@ -4,6 +4,7 @@ import {
   Route,
   Link,
   useLocation,
+  Redirect,
 } from "react-router-dom";
 import GlobalStyle from "./Styles/GlobalStyle";
 import io from "socket.io-client";
@@ -12,6 +13,8 @@ import Home from "./Routes/Home";
 import Room from "./Routes/Room";
 import Create from "./Routes/Create";
 import Join from "./Routes/Join";
+import NotFound from "./Routes/404/NotFound";
+import Error from "./Routes/404/Error";
 import SocketContext from "./Context/socket";
 import Session from "./Routes/Session";
 import { useTransition, animated, config } from "react-spring";
@@ -25,7 +28,7 @@ function App() {
   console.log(location);
 
   const transitions = useTransition(location, {
-    from: { translateY: "-100%", rotateZ: "5deg"},
+    from: { translateY: "-100%", rotateZ: "5deg" },
     enter: { translateY: "0%", rotateZ: "0deg" },
     leave: { translateY: "100%", rotateZ: "5deg" },
     config: config.gentle,
@@ -61,6 +64,12 @@ function App() {
               </Route>
               <Route path="/" exact>
                 <Home />
+              </Route>
+              <Route path="/error">
+                <Error/>
+              </Route>
+              <Route path="*">
+                <NotFound/>
               </Route>
             </Switch>
           </animated.div>

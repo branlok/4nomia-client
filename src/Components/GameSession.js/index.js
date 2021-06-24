@@ -56,6 +56,10 @@ function GameSession() {
     };
   });
 
+  let turn = playerDraw
+    ? playerDraw?.nextToDraw == socket.id
+    : state.init.playerPositions[0][0] == socket.id;
+
   return (
     <>
       <OverlayPrompt
@@ -69,7 +73,7 @@ function GameSession() {
         <WildCard wildCardListener={wildCardListener} />
       </LeftDivision>
       <RightDivision>
-        <StyOpponentQuadrant>
+        <StyOpponentQuadrant turn={!turn}>
           {Object.keys(state.roomState.currentMembers).map((item, index) => {
             if (item !== socket.id) {
               return (
@@ -95,7 +99,7 @@ function GameSession() {
             }
           })}
         </StyOpponentQuadrant>
-        <StyYourQuadrant turn={playerDraw?.nextToDraw == socket.id}>
+        <StyYourQuadrant turn={turn}>
           <Hand
             // playerHands={playerHands}
             faceoffListener={faceoffListener}
@@ -118,7 +122,9 @@ function GameSession() {
             playerName={state.roomState.currentMembers[socket.id]}
           />
           <div className="nameTag">
-            <div>{state.roomState.currentMembers[socket.id]}</div>
+            <div className="name">
+              {state.roomState.currentMembers[socket.id]}
+            </div>
           </div>
         </StyYourQuadrant>
       </RightDivision>
@@ -131,7 +137,8 @@ const LeftDivision = styled.div`
   height: 100%;
   border-right: 5px solid #ff2119;
   /* background-color: rgba(255, 255, 255, 0.1); */
-  background-color: #ff2119;
+  /* background-color: #ff2119; */
+  background-color: #643e46;
   flex: 0 1 auto;
   display: flex;
   flex-direction: column;
@@ -151,6 +158,10 @@ const LeftDivision = styled.div`
 const RightDivision = styled.div`
   width: 100%;
   height: 100%;
+  background-color: rgba(255, 255, 255, 0.05);
+  /* background-color: #bb0606; */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cpolygon fill='%235c1405' fill-opacity='0.61' points='120 0 120 60 90 30 60 0 0 0 0 0 60 60 0 120 60 120 90 90 120 60 120 0'/%3E%3C/svg%3E");
+
   /* background-color: rgba(255, 255, 255, 0.05);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cpolygon fill='%23c23838' fill-opacity='0.48' points='120 120 60 120 90 90 120 60 120 0 120 0 60 60 0 0 0 60 30 90 60 120 120 120 '/%3E%3C/svg%3E"); */
 `;
@@ -161,6 +172,8 @@ const StyOpponentQuadrant = styled.div`
   height: 50%;
   width: 100%;
   border-bottom: 5px solid #ff2119;
+  background-color: ${(props) =>
+    props.turn ? " rgba(150,150,150,0.15)" : " rgba(0,0,0,0)"};
   /* background-color: rgba(0, 0, 0, 0.15);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cpolygon fill='%23ff4d4d' fill-opacity='.8' points='120 0 120 60 90 30 60 0 0 0 0 0 60 60 0 120 60 120 90 90 120 60 120 0'/%3E%3C/svg%3E"); */
   .player {
@@ -176,6 +189,7 @@ const StyOpponentQuadrant = styled.div`
       .arrowSvg {
         width: 20px;
         height: 20px;
+        margin-bottom: 50px;
         fill: black;
         opacity: 0.5;
         transform: rotate(90deg);
@@ -192,34 +206,35 @@ const StyYourQuadrant = styled.div`
   width: 100%;
   padding: 20px;
   position: relative;
-  transition: 1s;
+  transition: 0.3s;
   background-color: ${(props) =>
-    props.turn ? " rgba(0,0,0,0.2)" : " rgba(0,0,0,0)"};
-  background-color: rgba(255, 255, 255, 0.05);
-  /* background-color: #bb0606; */
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cpolygon fill='%235c1405' fill-opacity='0.61' points='120 0 120 60 90 30 60 0 0 0 0 0 60 60 0 120 60 120 90 90 120 60 120 0'/%3E%3C/svg%3E");
+    props.turn ? " rgba(0,0,0,0.15)" : " rgba(0,0,0,0)"};
   .nameTag {
-    div {
+    .name {
       text-align: center;
-      /* border: 1px solid black; */
       width: 100%;
       transition: 0.3s;
       padding: 10px;
       border-radius: 10px;
+      backdrop-filter: blur(5px);
       /* color: white; */
-      color: ${(props) =>
-        props.turn ? "balck" : "white"};
+      color: ${(props) => (props.turn ? "black" : "white")};
       background-color: ${(props) =>
-        props.turn ? "rgba(255, 255, 255, 0.5)" : "rgba(0, 0, 0, 0.0);"};
+        props.turn ? "rgba(255, 255, 255, 0.6)" : "rgba(0, 0, 0, 0.6);"};
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
     }
     position: absolute;
     bottom: 0px;
+    left: 0px;
     width: 100%;
     justify-content: center;
     display: flex;
     padding: 10px;
   }
-  .controller {
+  /* background-color: rgba(255, 255, 255, 0.05);
+  /* background-color: #bb0606; */
+  /* background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cpolygon fill='%235c1405' fill-opacity='0.61' points='120 0 120 60 90 30 60 0 0 0 0 0 60 60 0 120 60 120 90 90 120 60 120 0'/%3E%3C/svg%3E"); */
+  */ .controller {
     width: 100px;
     height: 300px;
   }
