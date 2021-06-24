@@ -19,8 +19,8 @@ function Controller({
 
   const draw = () => {
     if (drawable) {
-      setDrawable(false);
       socket.emit("draw", code, (response) => {
+        setDrawable(false);
         console.log(response, playerId, "did this happen");
       });
     }
@@ -127,6 +127,7 @@ const StyledButtonsContainer = styled.div`
   .draw-btn {
     background-color: green;
     color: white;
+    user-select: none;
   }
 `;
 

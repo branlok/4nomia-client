@@ -15,6 +15,7 @@ function JoinMenu() {
   const [payload, setPayload] = useState(null);
   let socket = useContext(SocketContext);
   let history = useHistory();
+  console.log(history, "huh")
   let { code } = useParams();
 
   let transition = useTransition(view, {

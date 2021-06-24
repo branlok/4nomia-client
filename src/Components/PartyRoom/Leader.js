@@ -85,7 +85,7 @@ function Leader({ roomState, startGame, allowStart }) {
         </h2>
         <div className="codeWrapper">
           <h2 className="code" ref={link}>
-            localhost:3000/join/{state.code}
+            https://{window.location.hostname}.netlify.app/{state.code}
           </h2>
           <StyledCopyClipboardBtn onClick={linktoClipboard} copied={copied}>
             {copied ? <Check className="svg" /> : <Clipboard className="svg" />}
