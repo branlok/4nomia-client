@@ -20,7 +20,7 @@ import Session from "./Routes/Session";
 import { useTransition, animated, config } from "react-spring";
 
 
-let connect = io.connect(process.env.SERVER);
+let connect = io.connect(process.env.REACT_APP_SERVER);
 // let connect = io.connect("https://nomia-server.herokuapp.com/");
 
 function App() {
