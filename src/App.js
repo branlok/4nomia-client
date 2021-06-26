@@ -19,18 +19,20 @@ import SocketContext from "./Context/socket";
 import Session from "./Routes/Session";
 import { useTransition, animated, config } from "react-spring";
 
-// let connect = io.connect("http://localhost:3001");
-let connect = io.connect("https://nomia-server.herokuapp.com/");
+let connect = io.connect("http://localhost:3001");
+// let connect = io.connect("https://nomia-server.herokuapp.com/");
 
 function App() {
   const socket = useRef(connect);
   const location = useLocation();
-  console.log(location);
 
   const transitions = useTransition(location, {
+    // from: { translateY: "-100%",},
+    // enter: { translateY: "0%", },
+    // leave: { translateY: "100%",},
     from: { translateY: "-100%", rotateZ: "5deg" },
     enter: { translateY: "0%", rotateZ: "0deg" },
-    leave: { translateY: "100%", rotateZ: "5deg" },
+    leave: { translateY: "100%", rotateZ: "5deg"},
     config: config.gentle,
   });
 
@@ -46,16 +48,16 @@ function App() {
               width: "100%",
             }}
           >
-            <Switch>
+            <Switch location={item}>
               <Route path="/session/:code">
                 <Session />
               </Route>
               <Route path="/join/:code">
                 <Join socket={socket} />
               </Route>
-              <Route path="/join" exact>
+              {/* <Route path="/join" exact>
                 <Join socket={socket} />
-              </Route>
+              </Route> */}
               <Route path="/room/:code" exact>
                 <Room socket={socket} />
               </Route>
@@ -66,10 +68,10 @@ function App() {
                 <Home />
               </Route>
               <Route path="/error">
-                <ErrorPage/>
+                <ErrorPage />
               </Route>
               <Route path="*">
-                <NotFound/>
+                <NotFound />
               </Route>
             </Switch>
           </animated.div>

@@ -7,18 +7,18 @@ function HomeMenu() {
     <StyledMenu>
       <h1>4NOMIA</h1>
       <ul>
-        <li>
+        {/* <li>
           <Link to="/lobby">Lobby</Link>
-        </li>
+        </li> */}
         <li>
           <Link to="/create">Create Room</Link>
         </li>
-        <li>
+        {/* <li>
           <Link to="/join">Join By Code</Link>
-        </li>
-        <li>
+        </li> */}
+        {/* <li>
           <Link to="/setting">Settings</Link>
-        </li>
+        </li> */}
       </ul>
       <div className="discordSvg">
         <a href="https://discord.gg/hfHjjwXM">
@@ -45,17 +45,18 @@ const StyledMenu = styled.div`
       color: white;
       transition: 0.2s;
       :hover {
-        color: gray;
+        color: black;
       }
     }
     li {
       padding-top: 5px;
       font-size: 30px;
       color: white;
-      transition: 0.2s;
+      transition: 0.3s;
       cursor: pointer;
       :hover {
         color: gray;
+        transform: scale(0.95);
       }
     }
   }
@@ -72,10 +73,10 @@ const StyledMenu = styled.div`
       height: 25px;
       width: 25px;
       fill: #23272a;
-      transition: 0.5s;
+      transition: 0.3s;
       cursor: pointer;
       :hover {
-        fill: black;
+        fill: white;
       }
     }
   }

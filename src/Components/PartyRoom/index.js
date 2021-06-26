@@ -7,11 +7,11 @@ import Member from "./Member";
 
 function PartyRoom() {
   let { state } = useLocation();
-  console.log(state, "wtf");
   let history = useHistory();
+
   let socket = useContext(SocketContext);
   // let [members, setMembers] = useState({});
-  let [roomState, setRoomState] = useState(state.roomState);
+  let [roomState, setRoomState] = useState(state?.roomState);
   console.log(roomState, "this");
   let [allowStart, setAllowStart] = useState(false);
   // let [startGame, setStartGame] = useState(false);
@@ -37,6 +37,14 @@ function PartyRoom() {
       console.log(response);
     });
   };
+
+  useEffect(() => {
+    if (!roomState) {
+      history.push("/error", {
+        message: "Invalid request. Try joining a room via an invite link",
+      });
+    }
+  }, []);
 
   useEffect(() => {
     console.log(state);
@@ -78,10 +86,10 @@ function PartyRoom() {
       console.log(response);
     });
 
-    if (!state) {
-      history.push("/join");
-    }
-    
+    // if (!state) {
+    //   history.push("/join");
+    // }
+
     return () => {
       socket.off("roomUpdates");
       socket.off("creatorAnnouncement");
@@ -90,8 +98,9 @@ function PartyRoom() {
     };
   });
 
-  
-  if (state.role === "leader") {
+  if (!roomState) {
+    return null;
+  } else if (state.role === "leader") {
     return (
       <StyledMenu>
         <Leader
@@ -140,7 +149,7 @@ const StyledMenu = styled.div`
     display: flex;
     align-items: center;
     position: relative;
-    
+
     .code {
       font-size: 20px;
       transition: 0.2s;
@@ -167,8 +176,7 @@ const StyledMenu = styled.div`
     align-items: center;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
     text-align: center;
-    tra
-    form {
+    tra form {
       display: flex;
       flex-direction: column;
       justify-content: center;
