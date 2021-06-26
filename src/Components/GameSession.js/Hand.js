@@ -43,7 +43,7 @@ export default function Hand({ faceoffListener, playerDraw, playerId }) {
   useEffect(() => {
     if (faceoffListener) {
       if (faceoffListener.playersInvolved.includes(playerId)) {
-        console.log(playerId, "challenged");
+        // console.log(playerId, "challenged");
         setFaceoff(true);
       }
     }
@@ -58,7 +58,7 @@ export default function Hand({ faceoffListener, playerDraw, playerId }) {
         return newArray;
       });
       if (response.victor == playerId) {
-        console.log("you won");
+        // console.log("you won");
       }
     });
 

@@ -25,7 +25,7 @@ function TurnIndicator({
 
   useEffect(() => {
     if (faceoffListener) {
-      console.log(faceoffListener.playersInvolved, playerId);
+    //   console.log(faceoffListener.playersInvolved, playerId);
       if (faceoffListener.playersInvolved.includes(playerId)) {
         setFaceoff("you");
       } else {

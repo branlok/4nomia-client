@@ -19,12 +19,12 @@ function GameSession() {
   const [endGame, setEndGame] = useState(false);
   useEffect(() => {
     socket.on(`player_draw`, (response) => {
-        console.log(response);
+        // console.log(response);
       setPlayerDraw(response);
     });
     socket.on(`faceoff_challenged`, (response) => {
       setFaceoffListener(response);
-      console.log(response);
+    //   console.log(response);
       // if (response.playersInvolved.includes(playerId)) {
       //   console.log(playerId, "challenged");
       //   setFaceoff(true);
@@ -44,7 +44,7 @@ function GameSession() {
       // }
     });
     socket.on("roomAnnouncement", (response) => {
-      console.log(response);
+    //   console.log(response);
       setEndGame(response);
     });
 

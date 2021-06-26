@@ -4,7 +4,6 @@ import styled from "styled-components";
 
 function ErrorPage() {
   let location = useLocation();
-    console.log(location, "read");
 
   return (
     <StyledNotFound>

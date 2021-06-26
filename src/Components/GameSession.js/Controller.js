@@ -25,7 +25,7 @@ function Controller({
         if (response.command == "draw again") {
           setDrawable(true);
         }
-        console.log(response, playerId, "draw callback");
+        // console.log(response, playerId, "draw callback");
       });
     }
   };
@@ -33,7 +33,7 @@ function Controller({
   const winCard = () => {
     if (winable) {
       socket.emit("winCard", code, faceoffIds, (response) => {
-        console.log(response, "ey?");
+        // console.log(response, "ey?");
       });
     }
   };
@@ -41,7 +41,7 @@ function Controller({
   useEffect(() => {
     if (playerDraw) {
       if (playerDraw.nextToDraw == playerId) {
-        console.log("hello");
+        // console.log("hello");
         setDrawable(true);
       }
     }
@@ -60,9 +60,9 @@ function Controller({
   useEffect(() => {
     if (faceoffResolvedListener) {
       setWinable(false);
-      console.log("i ran to resolve");
+    //   console.log("i ran to resolve");
       if (faceoffResolvedListener.nextToDraw == playerId) {
-        console.log("draw it pls?");
+        // console.log("draw it pls?");
         setDrawable(true);
       }
     }
