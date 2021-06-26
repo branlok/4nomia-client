@@ -19,7 +19,8 @@ import SocketContext from "./Context/socket";
 import Session from "./Routes/Session";
 import { useTransition, animated, config } from "react-spring";
 
-let connect = io.connect("http://localhost:3001");
+
+let connect = io.connect(process.env.SERVER);
 // let connect = io.connect("https://nomia-server.herokuapp.com/");
 
 function App() {
