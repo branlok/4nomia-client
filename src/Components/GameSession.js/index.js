@@ -19,6 +19,7 @@ function GameSession() {
   const [endGame, setEndGame] = useState(false);
   useEffect(() => {
     socket.on(`player_draw`, (response) => {
+        console.log(response);
       setPlayerDraw(response);
     });
     socket.on(`faceoff_challenged`, (response) => {
@@ -208,7 +209,7 @@ const StyYourQuadrant = styled.div`
   position: relative;
   transition: 0.3s;
   background-color: ${(props) =>
-    props.turn ? " rgba(0,0,0,0.15)" : " rgba(0,0,0,0)"};
+    props.turn ? " rgba(0,0,0,0.10)" : " rgba(0,0,0,0)"};
   .nameTag {
     .name {
       text-align: center;

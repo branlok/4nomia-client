@@ -33,6 +33,7 @@ export default function Hand({ faceoffListener, playerDraw, playerId }) {
             deg: (Math.random() - 0.5) * 20,
             translateX: (Math.random() - 0.5) * 10,
             translateY: (Math.random() - 0.5) * 10,
+            z: items.length
           },
         ]);
       }
@@ -58,7 +59,6 @@ export default function Hand({ faceoffListener, playerDraw, playerId }) {
       });
       if (response.victor == playerId) {
         console.log("you won");
-
       }
     });
 
@@ -68,11 +68,11 @@ export default function Hand({ faceoffListener, playerDraw, playerId }) {
   });
 
   const transitions = useTransition(items, {
-    from: { opacity: 0, scale: 1.4, rotateX: 40 },
+    from: { opacity: 0, scale: 1.4 },
     //replace: { opacity: 0, transform: "scale(1.2)" },
-    enter: { opacity: 1, scale: 1, rotateX: 0 },
+    enter: { opacity: 1, scale: 1},
     //replace: { opacity: 0, transform: "scale(1.2)" },
-    leave: { opacity: 0, scale: 1.05, rotateX: 0 },
+    leave: { opacity: 0, scale: 1.05 },
     config: config.stiff,
   });
 

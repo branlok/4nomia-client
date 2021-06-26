@@ -19,9 +19,13 @@ function Controller({
 
   const draw = () => {
     if (drawable) {
+      setDrawable(false);
       socket.emit("draw", code, (response) => {
-        setDrawable(false);
-        console.log(response, playerId, "did this happen");
+        // setDrawable(false);
+        if (response.command == "draw again") {
+          setDrawable(true);
+        }
+        console.log(response, playerId, "draw callback");
       });
     }
   };
@@ -37,6 +41,7 @@ function Controller({
   useEffect(() => {
     if (playerDraw) {
       if (playerDraw.nextToDraw == playerId) {
+        console.log("hello");
         setDrawable(true);
       }
     }
@@ -125,9 +130,19 @@ const StyledButtonsContainer = styled.div`
   }
 
   .draw-btn {
-    background-color: green;
+    background-color: ForestGreen;
+    :hover {
+      background-color: DarkGreen;
+    }
     color: white;
     user-select: none;
+  }
+  .win-btn {
+      background-color: white;
+      :hover {
+          background-color: black;
+          color: white;
+      }
   }
 `;
 

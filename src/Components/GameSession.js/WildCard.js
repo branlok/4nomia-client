@@ -30,11 +30,11 @@ export default function WildCard({ wildCardListener }) {
   }, [wildCardListener]);
 
   const transitions = useTransition(wildCard, {
-    from: { opacity: 0, scale: 1.4, rotateX: 40 },
+    from: { opacity: 0, scale: 1.4 },
     //replace: { opacity: 0, transform: "scale(1.2)" },
-    enter: { opacity: 1, scale: 1, rotateX: 0 },
+    enter: { opacity: 1, scale: 1  },
     //replace: { opacity: 0, transform: "scale(1.2)" },
-    leave: { opacity: 0, scale: 1.05, rotateX: 0 },
+    leave: { opacity: 0, scale: 1.05},
     config: config.stiff,
   });
 
