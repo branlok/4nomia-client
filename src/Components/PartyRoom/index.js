@@ -149,13 +149,13 @@ const StyledMenu = styled.div`
     display: flex;
     align-items: center;
     position: relative;
-
+    margin-top: 5px;
     .code {
       font-size: 20px;
       transition: 0.2s;
       border: 2px solid black;
       padding: 10px;
-      margin: 15px 0px;
+
       border-radius: 5px;
       position: relative;
       :hover {
@@ -211,8 +211,8 @@ const StyledMenu = styled.div`
   }
   .notif {
     height: 25px;
-    margin-top: -20px;
-    margin-bottom: 10px;
+    margin-top: -40px;
+    margin-bottom: 5px;
     width: 100%;
   }
 `;

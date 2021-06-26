@@ -4,7 +4,7 @@ import * as yup from "yup";
 
 function UsernameForm({ code, setPayload, setView }) {
   let usernameSchema = yup.object().shape({
-    username: yup.string().min(1, "too short").max(26, "too long").required("a display name is required"),
+    username: yup.string().min(1, "too short").max(16, "16 characters or less").required("a display name is required"),
   });
 
   return (

@@ -30,9 +30,14 @@ function App() {
     // from: { translateY: "-100%",},
     // enter: { translateY: "0%", },
     // leave: { translateY: "100%",},
-    from: { translateY: "-100%", rotateZ: "5deg" },
+    from: {
+      position: "absolute",
+      width: "100%",
+      translateY: "-100%",
+      rotateZ: "5deg",
+    },
     enter: { translateY: "0%", rotateZ: "0deg" },
-    leave: { translateY: "100%", rotateZ: "5deg"},
+    leave: { translateY: "100%", rotateZ: "5deg" },
     config: config.gentle,
   });
 
@@ -42,11 +47,7 @@ function App() {
       <SocketContext.Provider value={socket.current}>
         {transitions((props, item) => (
           <animated.div
-            style={{
-              ...props,
-              position: "absolute",
-              width: "100%",
-            }}
+            style={props}
           >
             <Switch location={item}>
               <Route path="/session/:code">

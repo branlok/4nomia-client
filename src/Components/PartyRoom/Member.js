@@ -25,7 +25,7 @@ function Member({ roomState, readyUp, notReady }) {
       <h1>4NOMIA</h1>
       <div className="container">
         <h2>Hello {state.name}!</h2>
-        <h2>Press the ready button when you are</h2>
+        <h2 className="instructions">Press the ready button when you are</h2>
         <PlayersInRoom roomState={roomState} />
       </div>
 

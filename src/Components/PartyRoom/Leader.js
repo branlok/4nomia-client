@@ -16,7 +16,12 @@ function Leader({ roomState, startGame, allowStart }) {
   const props = useSpring({
     from: { translateX: "0px" },
     to: animate
-      ? [{ translateX: "20px" }, { translateX: "-20px" }, { translateX: "20px" }, { translateX: "0px" }]
+      ? [
+          { translateX: "20px" },
+          { translateX: "-20px" },
+          { translateX: "20px" },
+          { translateX: "0px" },
+        ]
       : { translateX: "0px" },
     // translateX: animate ? "5px" : "0px",
     config: { duration: 50 },
@@ -38,7 +43,7 @@ function Leader({ roomState, startGame, allowStart }) {
     if (allowStart) {
       startGame();
     } else {
-        console.log(prompt, "read me")
+      console.log(prompt, "read me");
       if (Object.keys(roomState.currentMembers).length == 1) {
         setAnimate(true);
         setPrompt(true);
@@ -78,7 +83,6 @@ function Leader({ roomState, startGame, allowStart }) {
             );
           })}
         </div>
-
         <h2 className="greetings">Hello {state.name}!</h2>
         <h2 className="instructions">
           invite friends to join with the link below
