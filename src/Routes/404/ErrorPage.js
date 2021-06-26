@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 
-function NotFound() {
+function ErrorPage() {
   let location = useLocation();
     console.log(location, "read");
 
@@ -54,4 +54,4 @@ let StyledNotFound = styled.div`
   }
 `;
 
-export default NotFound;
+export default ErrorPage;

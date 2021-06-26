@@ -14,13 +14,13 @@ import Room from "./Routes/Room";
 import Create from "./Routes/Create";
 import Join from "./Routes/Join";
 import NotFound from "./Routes/404/NotFound";
-import Error from "./Routes/404/Error";
+import ErrorPage from "./Routes/404/ErrorPage";
 import SocketContext from "./Context/socket";
 import Session from "./Routes/Session";
 import { useTransition, animated, config } from "react-spring";
 
-// let connect = io.connect("http://localhost:3001");
-let connect = io.connect("https://nomia-server.herokuapp.com/");
+let connect = io.connect("http://localhost:3001");
+// let connect = io.connect("https://nomia-server.herokuapp.com/");
 
 function App() {
   const socket = useRef(connect);
@@ -66,7 +66,7 @@ function App() {
                 <Home />
               </Route>
               <Route path="/error">
-                <Error/>
+                <ErrorPage/>
               </Route>
               <Route path="*">
                 <NotFound/>
