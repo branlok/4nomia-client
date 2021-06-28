@@ -7,6 +7,8 @@ import { useHistory, useParams } from "react-router";
 import UsernameForm from "./UsernameForm";
 import PasswordForm from "./PasswordForm";
 import StyledForm from "../../Styles/StyledForm";
+import Flip from "../../Sounds/flip.mp3";
+import useSound from "use-sound";
 import { useTransition, animated, config } from "react-spring";
 
 function JoinMenu() {
@@ -15,7 +17,7 @@ function JoinMenu() {
   const [payload, setPayload] = useState(null);
   let socket = useContext(SocketContext);
   let history = useHistory();
-  console.log(history, "huh")
+  let [flip] = useSound(Flip);
   let { code } = useParams();
 
   let transition = useTransition(view, {
@@ -23,6 +25,7 @@ function JoinMenu() {
     enter: { opacity: 1, rotateX: "0deg" },
     leave: { opacity: 0, rotateX: "180deg" },
     config: config.gentle,
+    onStart: flip,
   });
 
   useEffect(() => {
@@ -60,7 +63,7 @@ function JoinMenu() {
       if (response.status == "error") {
         history.push("/error", { message: response.message });
       } else {
-          console.log(response);
+        console.log(response);
       }
     });
   }, [code]);
@@ -87,7 +90,12 @@ function JoinMenu() {
             </animated.div>
           ) : (
             <animated.div style={{ ...props }} className="container black">
-              <PasswordForm code={code} setPayload={setPayload} setView={setView} payload={payload}/>
+              <PasswordForm
+                code={code}
+                setPayload={setPayload}
+                setView={setView}
+                payload={payload}
+              />
             </animated.div>
           );
         })}

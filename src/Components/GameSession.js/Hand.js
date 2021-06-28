@@ -5,6 +5,10 @@ import styled from "styled-components";
 import { useTransition, animated, config } from "react-spring";
 import { useLocation } from "react-router";
 import SocketContext from "../../Context/socket";
+import CardDrop from "../../Sounds/cardDrop.mp3";
+import CardOut from "../../Sounds/cardOut.mp3";
+import useSound from "use-sound";
+
 import { ReactComponent as CircleSvg } from "../../Styles/svg/presence-busy-16-filled-svgrepo-com.svg";
 import { ReactComponent as SquareSvg } from "../../Styles/svg/stop-svgrepo-com.svg";
 import { ReactComponent as StarSvg } from "../../Styles/svg/star-svgrepo-com (3).svg";
@@ -20,6 +24,9 @@ export default function Hand({ faceoffListener, playerDraw, playerId }) {
   const socket = useContext(SocketContext);
   const [items, setItems] = useState([]);
   const [faceoff, setFaceoff] = useState(false);
+  const [cardDrop] = useSound(CardDrop, { volume: 0.3});
+  const [cardOut] = useSound(CardOut, { volume: 0.3 });
+  const [discard, setDiscard] = useState(false);
 
   useEffect(() => {
     if (playerDraw) {
@@ -33,7 +40,7 @@ export default function Hand({ faceoffListener, playerDraw, playerId }) {
             deg: (Math.random() - 0.5) * 20,
             translateX: (Math.random() - 0.5) * 10,
             translateY: (Math.random() - 0.5) * 10,
-            z: items.length
+            z: items.length,
           },
         ]);
       }
@@ -45,6 +52,7 @@ export default function Hand({ faceoffListener, playerDraw, playerId }) {
       if (faceoffListener.playersInvolved.includes(playerId)) {
         // console.log(playerId, "challenged");
         setFaceoff(true);
+        setDiscard(true);
       }
     }
   }, [faceoffListener]);
@@ -67,13 +75,24 @@ export default function Hand({ faceoffListener, playerDraw, playerId }) {
     };
   });
 
+  let handleDiscardSound = () => {
+    if (discard) {
+        cardDrop();
+      setDiscard(false);
+    } else {
+        cardOut();
+
+    }
+  };
+
   const transitions = useTransition(items, {
-    from: { opacity: 0, scale: 1.4 },
+    from: { opacity: 0, scale: 1.4, translateX: 80 },
     //replace: { opacity: 0, transform: "scale(1.2)" },
-    enter: { opacity: 1, scale: 1},
+    enter: { opacity: 1, scale: 1, translateX: 0 },
     //replace: { opacity: 0, transform: "scale(1.2)" },
-    leave: { opacity: 0, scale: 1.05 },
+    leave: { opacity: 0, scale: 1.05, translateX: -50 },
     config: config.stiff,
+    onStart: handleDiscardSound
   });
 
   return (

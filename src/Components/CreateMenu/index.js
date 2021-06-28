@@ -6,18 +6,21 @@ import UsernameForm from "./UsernameForm";
 import CreateRoom from "./CreateRoom";
 import StyledForm from "../../Styles/StyledForm";
 import { useTransition, animated, config } from "react-spring";
-
+import useSound from "use-sound";
+import Flip from "../../Sounds/flip.mp3"
 function CreateMenu({ socket }) {
   const [step, setStep] = useState("usernamePage");
   const [name, setName] = useState(null);
   const [pass, setPass] = useState(null);
   const history = useHistory();
+  let [flip] = useSound(Flip);
 
   let transition = useTransition(step, {
     from: { opacity: 0, rotateX: "180deg" },
     enter: { opacity: 1, rotateX: "0deg" },
     leave: { opacity: 0, rotateX: "180deg" },
     config: config.gentle,
+    onStart: flip,
   });
 
   const emitRoomCreation = () => {

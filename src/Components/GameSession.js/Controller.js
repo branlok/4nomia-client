@@ -16,6 +16,7 @@ function Controller({
   const [drawable, setDrawable] = useState(firstTurn);
   const [winable, setWinable] = useState(false);
   const [faceoffIds, setFaceoffIds] = useState();
+  const [pressed, setPressed] = useState(false);
 
   const draw = () => {
     if (drawable) {
@@ -60,7 +61,7 @@ function Controller({
   useEffect(() => {
     if (faceoffResolvedListener) {
       setWinable(false);
-    //   console.log("i ran to resolve");
+      //   console.log("i ran to resolve");
       if (faceoffResolvedListener.nextToDraw == playerId) {
         // console.log("draw it pls?");
         setDrawable(true);
@@ -71,19 +72,31 @@ function Controller({
   let keyDown = (e) => {
     if (e.code == "Space" && !e.repeat) {
       buttonRef.current.click();
+      document.activeElement.blur();
+      setPressed(false);
+    } else if (e.code == "Space") {
+      setPressed(false);
+    }
+  };
+
+  let displayPressed = (e) => {
+    if (e.code == "Space") {
+      setPressed(true);
     }
   };
 
   useEffect(() => {
-    if (drawable) {
-      window.addEventListener("keyup", keyDown);
-    }
+    window.addEventListener("keydown", displayPressed);
+    return () => window.removeEventListener("keydown", displayPressed);
+  });
 
+  useEffect(() => {
+    window.addEventListener("keyup", keyDown);
     return () => window.removeEventListener("keyup", keyDown);
-  }, [drawable]);
+  });
 
   return (
-    <StyledButtonsContainer>
+    <StyledButtonsContainer pressed={pressed}>
       {
         <button
           ref={buttonRef}
@@ -130,19 +143,23 @@ const StyledButtonsContainer = styled.div`
   }
 
   .draw-btn {
-    background-color: ForestGreen;
+    background-color: ${(props) =>
+      props.pressed ? "DarkGreen" : "ForestGreen"};
+    box-shadow: ${(props) =>
+      props.pressed
+        ? "0 0px 0px rgba(0, 0, 0, 0), 0 0px 0px rgba(0, 0, 0, 0)"
+        : "0 3px 6px rgba(0, 0, 0, 0.36), 0 3px 6px rgba(0, 0, 0, 0.23)"};
     :hover {
       background-color: DarkGreen;
     }
     color: white;
-    user-select: none;
   }
   .win-btn {
-      background-color: white;
-      :hover {
-          background-color: black;
-          color: white;
-      }
+    background-color: white;
+    :hover {
+      background-color: black;
+      color: white;
+    }
   }
 `;
 

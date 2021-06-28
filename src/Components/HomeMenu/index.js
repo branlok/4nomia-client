@@ -2,7 +2,16 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { ReactComponent as DiscordSvg } from "../../Styles/svg/Discord-Logo-Black.svg";
+import useSound from "use-sound";
+import Click1 from "../../Sounds/Click_1.mp3";
+import Click2 from "../../Sounds/Click_2.mp3";
+
+
 function HomeMenu() {
+  const [DownSound] = useSound(Click1);
+  const [UpSound] = useSound(Click2);
+
+
   return (
     <StyledMenu>
       <h1>4NOMIA</h1>
@@ -11,18 +20,20 @@ function HomeMenu() {
           <Link to="/lobby">Lobby</Link>
         </li> */}
         <li>
-          <Link to="/create">Create Room</Link>
+          <Link onMouseOver={UpSound} onMouseDown={DownSound} onMouseUp={UpSound} to="/create">
+            Create Room
+          </Link>
         </li>
         {/* <li>
           <Link to="/join">Join By Code</Link>
         </li> */}
-        {/* <li>
-          <Link to="/setting">Settings</Link>
-        </li> */}
+        <li>
+          <Link onMouseOver={UpSound} onMouseDown={DownSound} onMouseUp={UpSound} to="/setting">Settings</Link>
+        </li>
       </ul>
       <div className="discordSvg">
         <a href="https://discord.gg/hfHjjwXM">
-          <DiscordSvg className="discord" target="_blank"/>
+          <DiscordSvg className="discord" target="_blank" />
         </a>
       </div>
     </StyledMenu>
@@ -43,8 +54,11 @@ const StyledMenu = styled.div`
     a {
       text-decoration: none;
       color: white;
-      transition: 0.2s;
+      transition: 0.3s;
       :hover {
+        color: black;
+      }
+      :active {
         color: black;
       }
     }
@@ -52,10 +66,12 @@ const StyledMenu = styled.div`
       padding-top: 5px;
       font-size: 30px;
       color: white;
-      transition: 0.3s;
+      transition: 0.1s;
       cursor: pointer;
       :hover {
         color: gray;
+      }
+      :active {
         transform: scale(0.95);
       }
     }

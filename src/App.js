@@ -9,6 +9,8 @@ import {
 import GlobalStyle from "./Styles/GlobalStyle";
 import io from "socket.io-client";
 import { useEffect, useState, useRef, createContext } from "react";
+
+//Routes
 import Home from "./Routes/Home";
 import Room from "./Routes/Room";
 import Create from "./Routes/Create";
@@ -19,6 +21,12 @@ import SocketContext from "./Context/socket";
 import Session from "./Routes/Session";
 import { useTransition, animated, config } from "react-spring";
 
+//Audio
+import useSound from "use-sound";
+import boxSounds1 from "./Sounds/BoxSound_1.mp3";
+import startGameSound from "./Sounds/enter.mp3";
+import Clown from "./Sounds/mr_clown.mp3";
+import VolumeToggle from "./Components/VolumeToggle";
 
 let connect = io.connect(process.env.REACT_APP_SERVER);
 // let connect = io.connect("https://nomia-server.herokuapp.com/");
@@ -26,7 +34,12 @@ let connect = io.connect(process.env.REACT_APP_SERVER);
 function App() {
   const socket = useRef(connect);
   const location = useLocation();
-
+  console.log(location);
+  const [rustle] = useSound(startGameSound, { volume: 1 });
+  const [rustle2] = useSound(boxSounds1, { volume: 1 });
+  // const [gameTheme] = useSound(Clown, { volume: 0.2, loop: true });
+  const [gameTheme, { stop }] = useSound(Clown, { loop: true, volume: 0.5 });
+  let [playing, setPlaying] = useState(false);
   const transitions = useTransition(location, {
     // from: { translateY: "-100%",},
     // enter: { translateY: "0%", },
@@ -35,11 +48,14 @@ function App() {
       position: "absolute",
       width: "100%",
       translateY: "-100%",
+      scale: location.pathname.match(/^\/session\//) ? "0" : "1",
       rotateZ: "5deg",
     },
-    enter: { translateY: "0%", rotateZ: "0deg" },
+    enter: { translateY: "0%", rotateZ: "0deg", scale: "1" },
     leave: { translateY: "100%", rotateZ: "5deg" },
     config: config.gentle,
+    delay: 50,
+    onStart: location.pathname.match(/^\/session\//) ? rustle : rustle2,
   });
 
   return (
@@ -47,9 +63,13 @@ function App() {
       <GlobalStyle />
       <SocketContext.Provider value={socket.current}>
         {transitions((props, item) => (
-          <animated.div
-            style={props}
-          >
+          <animated.div style={props}>
+            <VolumeToggle
+              gameTheme={gameTheme}
+              stop={stop}
+              playing={playing}
+              setPlaying={setPlaying}
+            />
             <Switch location={item}>
               <Route path="/session/:code">
                 <Session />

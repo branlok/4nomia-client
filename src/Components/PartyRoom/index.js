@@ -4,15 +4,17 @@ import styled from "styled-components";
 import SocketContext from "../../Context/socket";
 import Leader from "./Leader";
 import Member from "./Member";
-
+import DoorBell from "../../Sounds/doorbell.mp3";
+import useSound from "use-sound";
 function PartyRoom() {
   let { state } = useLocation();
   let history = useHistory();
+  let [doorbell] = useSound(DoorBell, {volume: 0.5});
 
   let socket = useContext(SocketContext);
   // let [members, setMembers] = useState({});
   let [roomState, setRoomState] = useState(state?.roomState);
-  console.log(roomState, "this");
+
   let [allowStart, setAllowStart] = useState(false);
   // let [startGame, setStartGame] = useState(false);
   // let {code} = useParams()
