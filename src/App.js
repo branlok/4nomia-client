@@ -35,7 +35,7 @@ function App() {
   const socket = useRef(connect);
   const location = useLocation();
   console.log(location);
-  const [rustle] = useSound(startGameSound, { volume: 1 });
+  const [rustle] = useSound(startGameSound, { volume: 0.5 });
   const [rustle2] = useSound(boxSounds1, { volume: 1 });
   // const [gameTheme] = useSound(Clown, { volume: 0.2, loop: true });
   const [gameTheme, { stop }] = useSound(Clown, { loop: true, volume: 0.5 });
