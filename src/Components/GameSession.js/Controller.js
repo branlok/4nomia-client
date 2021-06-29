@@ -17,6 +17,7 @@ function Controller({
   const [winable, setWinable] = useState(false);
   const [faceoffIds, setFaceoffIds] = useState();
   const [pressed, setPressed] = useState(false);
+  const [wait, setWait] = useState(false);
 
   const draw = () => {
     if (drawable) {
@@ -32,9 +33,11 @@ function Controller({
   };
 
   const winCard = () => {
-    if (winable) {
+    if (winable && !wait) {
+        setWait(true);
       socket.emit("winCard", code, faceoffIds, (response) => {
         // console.log(response, "ey?");
+        setWait(false);
       });
     }
   };
@@ -61,9 +64,8 @@ function Controller({
   useEffect(() => {
     if (faceoffResolvedListener) {
       setWinable(false);
-      //   console.log("i ran to resolve");
+      setWait(false);
       if (faceoffResolvedListener.nextToDraw == playerId) {
-        // console.log("draw it pls?");
         setDrawable(true);
       }
     }
