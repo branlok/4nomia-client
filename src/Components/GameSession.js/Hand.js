@@ -62,11 +62,11 @@ export default function Hand({ faceoffListener, playerDraw, playerId }) {
       setFaceoff(false);
       setItems((prevState) => {
         let newArray = [...prevState];
-        newArray.pop();
+        let x = newArray.pop();
+        console.log("card popoff:", x)
         return newArray;
       });
       if (response.victor === playerId) {
-        // console.log("you won");
       }
     });
 
