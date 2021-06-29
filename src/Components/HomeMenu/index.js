@@ -27,9 +27,9 @@ function HomeMenu() {
         {/* <li>
           <Link to="/join">Join By Code</Link>
         </li> */}
-        <li>
+        {/* <li>
           <Link onMouseOver={UpSound} onMouseDown={DownSound} onMouseUp={UpSound} to="/setting">Settings</Link>
-        </li>
+        </li> */}
       </ul>
       <div className="discordSvg">
         <a href="https://discord.gg/hfHjjwXM">

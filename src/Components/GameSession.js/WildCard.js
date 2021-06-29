@@ -10,10 +10,16 @@ import { ReactComponent as HashSvg } from '../../Styles/svg/hash-svgrepo-com.svg
 import { ReactComponent as ZigZagSvg } from '../../Styles/svg/zigzag-hieroglyph-svgrepo-com.svg';
 import { ReactComponent as PauseSvg } from '../../Styles/svg/pause-two-lines-svgrepo-com.svg';
 import { ReactComponent as PlusSvg } from '../../Styles/svg/plus-svgrepo-com (1).svg';
+
 import basicDeck from "../../Cards";
+import useSound from "use-sound";
+import WildCardDrop from "../../Sounds/WildCardDrop.mp3";
+
 
 export default function WildCard({ wildCardListener }) {
   let [wildCard, setWildCard] = useState([]);
+//   const [cardDrop] = useSound(CardDrop, { volume: 0.3});
+  const [wildCardSound] = useSound(WildCardDrop, { volume: 0.3 });
 
   useEffect(() => {
     if (wildCardListener) {
@@ -36,6 +42,7 @@ export default function WildCard({ wildCardListener }) {
     //replace: { opacity: 0, transform: "scale(1.2)" },
     leave: { opacity: 0, scale: 1.05},
     config: config.stiff,
+    onStart: wildCardSound
   });
 
   return (
@@ -49,23 +56,23 @@ export default function WildCard({ wildCardListener }) {
             }}
           >
             <p>Wild Card</p>
-            {item.match[0] == "hash" && <HashSvg className="svg" />}
-            {item.match[0] == "circle" &&  <CircleSvg className="svg"/>}
-            {item.match[0] == "square" && <SquareSvg className="svg" />}
-            {item.match[0] == "star" && <StarSvg className="svg" />}
-            {item.match[0] == "donut" && <DonutSvg className="svg" />}
-            {item.match[0] == "zig zag" &&  <ZigZagSvg className="svg"/>}
-            {item.match[0] == "pause" &&  <PauseSvg className="svg"/>}
-            {item.match[0] == "plus" &&  <PlusSvg className="svg"/>}
+            {item.match[0] === "hash" && <HashSvg className="svg" />}
+            {item.match[0] === "circle" &&  <CircleSvg className="svg"/>}
+            {item.match[0] === "square" && <SquareSvg className="svg" />}
+            {item.match[0] === "star" && <StarSvg className="svg" />}
+            {item.match[0] === "donut" && <DonutSvg className="svg" />}
+            {item.match[0] === "zig zag" &&  <ZigZagSvg className="svg"/>}
+            {item.match[0] === "pause" &&  <PauseSvg className="svg"/>}
+            {item.match[0] === "plus" &&  <PlusSvg className="svg"/>}
 
-            {item.match[1] == "hash" && <HashSvg className="svg" />}
-            {item.match[1] == "square" && <SquareSvg className="svg" />}
-            {item.match[1] == "circle" &&  <CircleSvg className="svg"/>}
-            {item.match[1] == "star" && <StarSvg className="svg" />}
-            {item.match[1] == "donut" && <DonutSvg className="svg" />}
-            {item.match[1] == "zig zag" &&  <ZigZagSvg className="svg"/>}
-            {item.match[1] == "pause" &&  <PauseSvg className="svg"/>}
-            {item.match[1] == "plus" &&  <PlusSvg className="svg"/>}
+            {item.match[1] === "hash" && <HashSvg className="svg" />}
+            {item.match[1] === "square" && <SquareSvg className="svg" />}
+            {item.match[1] === "circle" &&  <CircleSvg className="svg"/>}
+            {item.match[1] === "star" && <StarSvg className="svg" />}
+            {item.match[1] === "donut" && <DonutSvg className="svg" />}
+            {item.match[1] === "zig zag" &&  <ZigZagSvg className="svg"/>}
+            {item.match[1] === "pause" &&  <PauseSvg className="svg"/>}
+            {item.match[1] === "plus" &&  <PlusSvg className="svg"/>}
             <p>Wild Card</p>
           </StyledCard>
         );
@@ -81,7 +88,7 @@ const StyledQuadrant = styled.div`
   height: 210px;
   width: 140px;
   position: relative;
-  margin: 0px 20px;
+  margin: 30px 20px;
 `;
 
 const StyledCard = styled(animated.div)`
@@ -108,6 +115,7 @@ const StyledCard = styled(animated.div)`
   border-radius: 5px;
   background-color: #080808;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='69' height='69' viewBox='0 0 120 120'%3E%3Cpolygon fill='%23adadad' fill-opacity='0.07' points='120 120 60 120 90 90 120 60 120 0 120 0 60 60 0 0 0 60 30 90 60 120 120 120 '/%3E%3C/svg%3E");
+  
   :hover {
     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   }

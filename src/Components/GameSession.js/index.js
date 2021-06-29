@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router";
-import styled from "styled-components";
+import styled, { keyframes, css } from "styled-components";
 import SocketContext from "../../Context/socket";
 import Controller from "./Controller";
 import Hand from "./Hand";
@@ -9,6 +9,7 @@ import TurnIndicator from "./TurnIndicator";
 import WildCard from "./WildCard";
 import YourTurnIndicator from "./YourTurnIndicator.js";
 import { ReactComponent as ArrowSvg } from "../../Styles/svg/up-arrow-svgrepo-com (6).svg";
+import ScoreBoard from "./ScoreBoard";
 function GameSession() {
   const { state } = useLocation();
   const socket = useContext(SocketContext);
@@ -19,12 +20,12 @@ function GameSession() {
   const [endGame, setEndGame] = useState(false);
   useEffect(() => {
     socket.on(`player_draw`, (response) => {
-        // console.log(response);
+      // console.log(response);
       setPlayerDraw(response);
     });
     socket.on(`faceoff_challenged`, (response) => {
       setFaceoffListener(response);
-    //   console.log(response);
+      //   console.log(response);
       // if (response.playersInvolved.includes(playerId)) {
       //   console.log(playerId, "challenged");
       //   setFaceoff(true);
@@ -44,7 +45,7 @@ function GameSession() {
       // }
     });
     socket.on("roomAnnouncement", (response) => {
-    //   console.log(response);
+      //   console.log(response);
       setEndGame(response);
     });
 
@@ -72,6 +73,7 @@ function GameSession() {
       <LeftDivision>
         <h1>WILD CARD</h1>
         <WildCard wildCardListener={wildCardListener} />
+        <ScoreBoard faceoffResolvedListener={faceoffResolvedListener} />
       </LeftDivision>
       <RightDivision>
         <StyOpponentQuadrant turn={!turn}>
@@ -95,6 +97,17 @@ function GameSession() {
                       playerName={state.roomState.currentMembers[item]}
                     />
                   </div>
+                </div>
+              );
+            } else {
+              return (
+                <div className="player" key={item}>
+                  {index !== 0 && (
+                    <div className="arrow">
+                      <ArrowSvg className="arrowSvg" />
+                    </div>
+                  )}
+                  <div className="you">YOU</div>
                 </div>
               );
             }
@@ -133,6 +146,18 @@ function GameSession() {
   );
 }
 
+const pulse = keyframes`
+    0% {
+        background-color: rgba(0,0,0,0);
+    }
+    100% {
+        background-color: rgba(0,0,0,0.15);
+    }
+    /* 100% {
+        background-color: rgba(0,0,0,0);
+    } */
+`;
+
 const LeftDivision = styled.div`
   width: 400px;
   height: 100%;
@@ -145,7 +170,6 @@ const LeftDivision = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
   h1 {
     margin-bottom: 20px;
     font-size: 20px;
@@ -173,13 +197,34 @@ const StyOpponentQuadrant = styled.div`
   height: 50%;
   width: 100%;
   border-bottom: 5px solid #ff2119;
-  background-color: ${(props) =>
-    props.turn ? " rgba(150,150,150,0.15)" : " rgba(0,0,0,0)"};
+  /* background-color: ${(props) =>
+    props.turn ? " rgba(150,150,150,0.15)" : " rgba(0,0,0,0)"}; */
+  animation: ${(props) =>
+    props.turn
+      ? css`
+          ${pulse} 1s ease infinite alternate;
+        `
+      : css``};
   /* background-color: rgba(0, 0, 0, 0.15);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cpolygon fill='%23ff4d4d' fill-opacity='.8' points='120 0 120 60 90 30 60 0 0 0 0 0 60 60 0 120 60 120 90 90 120 60 120 0'/%3E%3C/svg%3E"); */
   .player {
     display: flex;
     .main {
+    }
+    .you {
+      /* border: 2px solid black; */
+      transition: 0.3s;
+      background-color: ${(props) =>
+        props.turn ? " rgba(0,0,0,0.5)" : "rgba(255,255,255,0.5)"};
+      border-radius: 50%;
+      height: 75px;
+      width: 75px;
+      display: flex;
+      justify-content: center;
+      font-weight: bold;
+      align-items: center;
+      margin-bottom: 50px;
+      color: white;
     }
     .arrow {
       display: flex;
@@ -208,8 +253,14 @@ const StyYourQuadrant = styled.div`
   padding: 20px;
   position: relative;
   transition: 0.3s;
-  background-color: ${(props) =>
-    props.turn ? " rgba(0,0,0,0.10)" : " rgba(0,0,0,0)"};
+  animation: ${(props) =>
+    props.turn
+      ? css`
+          ${pulse} 1s ease infinite alternate;
+        `
+      : css``};
+  /* background-color: ${(props) =>
+    props.turn ? " rgba(0,0,0,0.10)" : " rgba(0,0,0,0)"}; */
   .nameTag {
     .name {
       text-align: center;

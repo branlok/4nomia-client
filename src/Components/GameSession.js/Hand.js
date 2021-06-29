@@ -24,13 +24,13 @@ export default function Hand({ faceoffListener, playerDraw, playerId }) {
   const socket = useContext(SocketContext);
   const [items, setItems] = useState([]);
   const [faceoff, setFaceoff] = useState(false);
-  const [cardDrop] = useSound(CardDrop, { volume: 0.3});
+  const [cardDrop] = useSound(CardDrop, { volume: 0.3 });
   const [cardOut] = useSound(CardOut, { volume: 0.3 });
   const [discard, setDiscard] = useState(false);
 
   useEffect(() => {
     if (playerDraw) {
-      if (playerDraw.playerId == playerId) {
+      if (playerDraw.playerId === playerId) {
         setItems((prevState) => [
           ...prevState,
           {
@@ -65,7 +65,7 @@ export default function Hand({ faceoffListener, playerDraw, playerId }) {
         newArray.pop();
         return newArray;
       });
-      if (response.victor == playerId) {
+      if (response.victor === playerId) {
         // console.log("you won");
       }
     });
@@ -77,11 +77,10 @@ export default function Hand({ faceoffListener, playerDraw, playerId }) {
 
   let handleDiscardSound = () => {
     if (discard) {
-        cardDrop();
+      cardDrop();
       setDiscard(false);
     } else {
-        cardOut();
-
+      cardOut();
     }
   };
 
@@ -92,7 +91,7 @@ export default function Hand({ faceoffListener, playerDraw, playerId }) {
     //replace: { opacity: 0, transform: "scale(1.2)" },
     leave: { opacity: 0, scale: 1.05, translateX: -50 },
     config: config.stiff,
-    onStart: handleDiscardSound
+    onStart: handleDiscardSound,
   });
 
   return (
@@ -107,14 +106,14 @@ export default function Hand({ faceoffListener, playerDraw, playerId }) {
             }}
           >
             <p>{item.value}</p>
-            {item.match[0] == "hash" && <HashSvg className="svg red" />}
-            {item.match[0] == "square" && <SquareSvg className="svg orange" />}
-            {item.match[0] == "star" && <StarSvg className="svg indigo" />}
-            {item.match[0] == "donut" && <DonutSvg className="svg yellow" />}
-            {item.match[0] == "circle" && <CircleSvg className="svg brown" />}
-            {item.match[0] == "pause" && <PauseSvg className="svg purple" />}
-            {item.match[0] == "plus" && <PlusSvg className="svg green" />}
-            {item.match[0] == "zig zag" && <ZigZagSvg className="svg" />}
+            {item.match[0] === "hash" && <HashSvg className="svg red" />}
+            {item.match[0] === "square" && <SquareSvg className="svg orange" />}
+            {item.match[0] === "star" && <StarSvg className="svg indigo" />}
+            {item.match[0] === "donut" && <DonutSvg className="svg yellow" />}
+            {item.match[0] === "circle" && <CircleSvg className="svg brown" />}
+            {item.match[0] === "pause" && <PauseSvg className="svg purple" />}
+            {item.match[0] === "plus" && <PlusSvg className="svg green" />}
+            {item.match[0] === "zig zag" && <ZigZagSvg className="svg" />}
             <p>{item.value}</p>
           </StyledCard>
         );

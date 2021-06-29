@@ -2,9 +2,7 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
   useLocation,
-  Redirect,
 } from "react-router-dom";
 import GlobalStyle from "./Styles/GlobalStyle";
 import io from "socket.io-client";
@@ -35,15 +33,15 @@ function App() {
   const socket = useRef(connect);
   const location = useLocation();
   console.log(location);
+  
+  //Audio
   const [rustle] = useSound(startGameSound, { volume: 0.5 });
   const [rustle2] = useSound(boxSounds1, { volume: 1 });
-  // const [gameTheme] = useSound(Clown, { volume: 0.2, loop: true });
   const [gameTheme, { stop }] = useSound(Clown, { loop: true, volume: 0.5 });
   let [playing, setPlaying] = useState(false);
+
+  //animation
   const transitions = useTransition(location, {
-    // from: { translateY: "-100%",},
-    // enter: { translateY: "0%", },
-    // leave: { translateY: "100%",},
     from: {
       position: "absolute",
       width: "100%",
@@ -54,7 +52,7 @@ function App() {
     enter: { translateY: "0%", rotateZ: "0deg", scale: "1" },
     leave: { translateY: "100%", rotateZ: "5deg" },
     config: config.gentle,
-    delay: 50,
+    delay: 0,
     onStart: location.pathname.match(/^\/session\//) ? rustle : rustle2,
   });
 
