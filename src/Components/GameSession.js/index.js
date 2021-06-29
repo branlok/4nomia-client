@@ -37,6 +37,7 @@ function GameSession() {
 
     socket.on(`faceoff_resolved`, (response) => {
       setFaceoffResolvedListener(response);
+
       // setWinable(false);
       // console.log("i ran to resolve")
       // if (response.nextToDraw == playerId) {
@@ -86,6 +87,7 @@ function GameSession() {
                   </div>
                   <div className="main">
                     <Hand
+                      faceoffResolvedListener={faceoffResolvedListener}
                       faceoffListener={faceoffListener}
                       playerId={item}
                       playerDraw={playerDraw}
@@ -116,6 +118,7 @@ function GameSession() {
         <StyYourQuadrant turn={turn}>
           <Hand
             // playerHands={playerHands}
+            faceoffResolvedListener={faceoffResolvedListener}
             faceoffListener={faceoffListener}
             playerDraw={playerDraw}
             playerId={socket.id}

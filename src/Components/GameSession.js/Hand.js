@@ -19,7 +19,12 @@ import { ReactComponent as ZigZagSvg } from "../../Styles/svg/zigzag-hieroglyph-
 import { ReactComponent as PauseSvg } from "../../Styles/svg/pause-two-lines-svgrepo-com.svg";
 import { ReactComponent as PlusSvg } from "../../Styles/svg/plus-svgrepo-com (1).svg";
 
-export default function Hand({ faceoffListener, playerDraw, playerId }) {
+export default function Hand({
+  faceoffResolvedListener,
+  faceoffListener,
+  playerDraw,
+  playerId,
+}) {
   const { state } = useLocation();
   const socket = useContext(SocketContext);
   const [items, setItems] = useState([]);
@@ -58,22 +63,36 @@ export default function Hand({ faceoffListener, playerDraw, playerId }) {
   }, [faceoffListener]);
 
   useEffect(() => {
-    socket.on(`faceoff_resolved_${playerId}`, (response) => {
-      setFaceoff(false);
-      setItems((prevState) => {
-        let newArray = [...prevState];
-        let x = newArray.pop();
-        console.log("card popoff:", x)
-        return newArray;
-      });
-      if (response.victor === playerId) {
+    if (faceoffResolvedListener) {
+      if (faceoffResolvedListener.players.includes(playerId)) {
+        setFaceoff(false);
+        setItems((prevState) => {
+          let newArray = [...prevState];
+          let x = newArray.pop();
+          console.log("card popoff:", x);
+          return newArray;
+        });
       }
-    });
+    }
+  }, [faceoffResolvedListener]);
 
-    return () => {
-      socket.off(`faceoff_resolved_${playerId}`);
-    };
-  });
+//   useEffect(() => {
+//     socket.on(`faceoff_resolved_${playerId}`, (response) => {
+//       setFaceoff(false);
+//       setItems((prevState) => {
+//         let newArray = [...prevState];
+//         let x = newArray.pop();
+//         console.log("card popoff:", x);
+//         return newArray;
+//       });
+//       if (response.victor === playerId) {
+//       }
+//     });
+
+//     return () => {
+//       socket.off(`faceoff_resolved_${playerId}`);
+//     };
+//   });
 
   let handleDiscardSound = () => {
     if (discard) {
