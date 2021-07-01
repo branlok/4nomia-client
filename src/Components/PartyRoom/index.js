@@ -4,17 +4,13 @@ import styled from "styled-components";
 import SocketContext from "../../Context/socket";
 import Leader from "./Leader";
 import Member from "./Member";
-import DoorBell from "../../Sounds/doorbell.mp3";
-import useSound from "use-sound";
 function PartyRoom() {
   let { state } = useLocation();
   let history = useHistory();
-  let [doorbell] = useSound(DoorBell, {volume: 0.5});
 
   let socket = useContext(SocketContext);
   // let [members, setMembers] = useState({});
   let [roomState, setRoomState] = useState(state?.roomState);
-
   let [allowStart, setAllowStart] = useState(false);
   // let [startGame, setStartGame] = useState(false);
   // let {code} = useParams()
@@ -41,7 +37,8 @@ function PartyRoom() {
   };
 
   useEffect(() => {
-    if (!roomState) {
+    console.log(state, "rea");
+    if (!state) {
       history.push("/error", {
         message: "Invalid request. Try joining a room via an invite link",
       });
@@ -53,9 +50,8 @@ function PartyRoom() {
     console.log(socket.id);
     //leave page if state doesnt exists
     socket.on("roomUpdates", (response) => {
-      console.log(response, "wtf");
       setRoomState((prevState) => {
-        console.log(response, "read me");
+        console.log(response, "roomUpdates");
         return { ...prevState, ...response };
       });
       // setMembers(response.currentMembers);
@@ -88,9 +84,6 @@ function PartyRoom() {
       console.log(response);
     });
 
-    // if (!state) {
-    //   history.push("/join");
-    // }
 
     return () => {
       socket.off("roomUpdates");

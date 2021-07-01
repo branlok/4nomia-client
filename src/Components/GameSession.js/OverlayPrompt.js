@@ -11,6 +11,7 @@ function OverlayPrompt({
 }) {
   let [msg, setMsg] = useState(firstPlayerName);
   let [ranks, setRanks] = useState();
+  let [userDisconnected, setUserDisconnected] = useState();
   let props = useSpring({
     from: {
       scale: 0,
@@ -39,9 +40,8 @@ function OverlayPrompt({
   });
 
   useEffect(() => {
-    if (endGame) {
+    if (endGame?.status == "endgame") {
       let leaderboard = [];
-
       endGame.results.forEach((item, index) => {
         if (playerPositions[index]) {
           if (item) {
@@ -57,6 +57,10 @@ function OverlayPrompt({
 
       setRanks(sortedLeaderBoard);
       setMsg(true);
+    } else if (
+      endGame?.status == "disconnection"
+    ) {
+      setMsg(true);
     }
   }, [endGame]);
 
@@ -66,7 +70,8 @@ function OverlayPrompt({
         Game Finished!
         <div className="leaderboard">
           <h1>Leaderboard</h1>
-          {ranks &&
+
+          {ranks && endGame.status == "endgame" &&
             ranks.map((item, idx) => {
               return (
                 <div className="player" key={item.name}>
@@ -78,19 +83,6 @@ function OverlayPrompt({
                 </div>
               );
             })}
-          {/* {endGame.results.map((item, idx) => {
-            if (item !== null) {
-              return (
-                <div className="player" key={playerPositions[idx]}>
-                  <h2>{idx + 1} Place</h2>
-                  <div>
-                    {playerPositions[idx][1]} <span className="with">with</span>
-                    <span className="points"> {item ? item : 0} pts</span>
-                  </div>
-                </div>
-              );
-            }
-          })} */}
           <div className="footer">
             Thanks for playing ! <br /> To return to home press{" "}
             <Link to="/">here</Link>

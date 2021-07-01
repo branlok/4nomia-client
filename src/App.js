@@ -56,6 +56,13 @@ function App() {
     onStart: location.pathname.match(/^\/session\//) ? rustle : rustle2,
   });
 
+  useEffect(() => {
+    socket.current.on("err", (response) => {
+      console.log(response)
+    })
+    return () => socket.current.off("err");
+  })
+
   return (
     <>
       <GlobalStyle />

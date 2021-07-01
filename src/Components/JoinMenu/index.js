@@ -39,41 +39,41 @@ function JoinMenu() {
     });
   }, []);
 
-  const JoinRoom = () => {
-    socket.emit(
-      "joinNewRoom",
-      code,
-      payload.username,
-      payload.password,
-      (response) => {
-        console.log(response, "check me");
-        history.push(`/room/${code}`, {
-          code,
-          name: payload.username,
-          role: "member",
-          roomState: response.roomState,
-        });
-      }
-    );
-  };
+  // const JoinRoom = () => {
+  //   socket.emit(
+  //     "joinNewRoom",
+  //     code,
+  //     payload.username,
+  //     payload.password,
+  //     (response) => {
+  //       console.log(response, "checkdf me");
+        
+  //       history.push(`/room/${code}`, {
+  //         code,
+  //         name: payload.username,
+  //         role: "member",
+  //         roomState: response,
+  //       });
+  //     }
+  //   );
+  // };
 
   useEffect(() => {
-    console.log("fired");
     socket.emit("checkRoom", code, (response) => {
       if (response.status == "error") {
-        history.push("/error", { message: response.message });
+        history.replace("/error", { message: response.message });
       } else {
         console.log(response);
       }
     });
   }, [code]);
 
-  useEffect(() => {
-    if (payload && view === "enter") {
-      console.log("i ran");
-      JoinRoom();
-    }
-  }, [view]);
+  // useEffect(() => {
+  //   if (payload && view === "enter") {
+  //     console.log("i ran");
+  //     JoinRoom();
+  //   }
+  // }, [view]);
 
   return (
     <StyledForm>

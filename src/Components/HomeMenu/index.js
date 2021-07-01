@@ -5,11 +5,13 @@ import { ReactComponent as DiscordSvg } from "../../Styles/svg/Discord-Logo-Blac
 import useSound from "use-sound";
 import Click1 from "../../Sounds/Click_1.mp3";
 import Click2 from "../../Sounds/Click_2.mp3";
+import { useSpring } from "@react-spring/core";
 
 
 function HomeMenu() {
   const [DownSound] = useSound(Click1);
   const [UpSound] = useSound(Click2);
+
 
 
   return (

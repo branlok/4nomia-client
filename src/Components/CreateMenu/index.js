@@ -27,7 +27,6 @@ function CreateMenu({ socket }) {
     socket.current.emit("setNewRoom", name, pass, (response) => {
       if (response.status == "success") {
         let code = response.connectedRoom;
-        console.log(response, "read me");
         history.push(`/room/${code}`, {
           name,
           pass,
@@ -35,8 +34,6 @@ function CreateMenu({ socket }) {
           role: "leader",
           roomState: response,
         });
-      } else {
-        window.alert(response.message);
       }
     });
   };

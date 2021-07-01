@@ -19,7 +19,7 @@ function Member({ roomState, readyUp, notReady }) {
     return () => window.removeEventListener("keyup", toggleReady);
   }, [ready]);
 
-  if (!roomState?.currentMembers) return null;
+  if (!roomState.currentMembers) return null;
   return (
     <>
       <h1>4NOMIA</h1>

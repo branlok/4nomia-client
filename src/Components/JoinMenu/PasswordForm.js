@@ -28,7 +28,7 @@ function PasswordForm({ code, setPayload, payload, setView }) {
           code,
           name: payload.username,
           role: "member",
-          roomState: response.roomState,
+          roomState: response,
         });
       }
     });

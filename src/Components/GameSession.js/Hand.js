@@ -143,7 +143,7 @@ export default function Hand({
   );
 }
 const StyledQuadrant = styled.div`
-  background-color: #b00c0f;
+  background-color: rgba(0,0,0,0.6);// #b00c0f;
   border-radius: 15px;
   height: 210px;
   width: 140px;

@@ -4,7 +4,7 @@ import styled, { keyframes, css } from "styled-components";
 import SocketContext from "../../Context/socket";
 import Controller from "./Controller";
 import Hand from "./Hand";
-import OverlayPrompt from "./OverlayPrompt";
+import OverlayPrompt from "./Overlay/index.js";
 import TurnIndicator from "./TurnIndicator";
 import WildCard from "./WildCard";
 import YourTurnIndicator from "./YourTurnIndicator.js";
